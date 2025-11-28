@@ -1,17 +1,44 @@
+import { useEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
+import { LanguageSelector } from '@/components/language-selector';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { getSelectedLanguage } from '@/src/utils/storage';
 import { useRouter } from 'expo-router';
 
 export default function HomeScreen() {
   const router = useRouter();
+  const [showLanguageSelector, setShowLanguageSelector] = useState(false);
+  const [hasSelectedLanguage, setHasSelectedLanguage] = useState(false);
+
+  useEffect(() => {
+    checkSelectedLanguage();
+  }, []);
+
+  async function checkSelectedLanguage() {
+    const language = await getSelectedLanguage();
+    setHasSelectedLanguage(!!language);
+  }
+
+  function handleCameraPress() {
+    if (hasSelectedLanguage) {
+      router.push('/camera');
+    } else {
+      setShowLanguageSelector(true);
+    }
+  }
+
+  function handleLanguageSelected() {
+    setHasSelectedLanguage(true);
+    router.push('/camera');
+  }
 
   return (
     <ThemedView style={styles.container}>
       <TouchableOpacity
         style={styles.cameraButton}
-        onPress={() => router.push('/camera')}>
+        onPress={handleCameraPress}>
         <ThemedText
           type="defaultSemiBold"
           style={styles.cameraButtonText}
@@ -20,6 +47,11 @@ export default function HomeScreen() {
           Camera translation
         </ThemedText>
       </TouchableOpacity>
+      <LanguageSelector
+        visible={showLanguageSelector}
+        onClose={() => setShowLanguageSelector(false)}
+        onLanguageSelected={handleLanguageSelected}
+      />
     </ThemedView>
   );
 }

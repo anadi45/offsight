@@ -1,14 +1,38 @@
 import { CameraView, useCameraPermissions } from 'expo-camera';
-import { useState } from 'react';
-import { Button, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Link } from 'expo-router';
+import { useEffect, useState } from 'react';
+import { Button, StyleSheet, TouchableOpacity, View } from 'react-native';
 
+import { LanguageSelector } from '@/components/language-selector';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
+import { getSelectedLanguage, SUPPORTED_LANGUAGES } from '@/src/utils/storage';
 
 export default function CameraScreen() {
   const [facing, setFacing] = useState<'back' | 'front'>('back');
   const [permission, requestPermission] = useCameraPermissions();
+  const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
+  const [showLanguageSelector, setShowLanguageSelector] = useState(false);
+
+  useEffect(() => {
+    loadSelectedLanguage();
+  }, []);
+
+  async function loadSelectedLanguage() {
+    const language = await getSelectedLanguage();
+    setSelectedLanguage(language);
+  }
+
+  function getLanguageName(code: string | null): string {
+    if (!code) return 'Not selected';
+    const language = SUPPORTED_LANGUAGES.find((lang) => lang.code === code);
+    return language?.name || code;
+  }
+
+  async function handleLanguageSelected(languageCode: string) {
+    setSelectedLanguage(languageCode);
+    // Language is already saved by LanguageSelector component
+  }
 
   if (!permission) {
     // Camera permissions are still loading
@@ -36,6 +60,15 @@ export default function CameraScreen() {
   return (
     <ThemedView style={styles.container}>
       <CameraView style={styles.camera} facing={facing}>
+        <View style={styles.topBar}>
+          <TouchableOpacity
+            style={styles.languageButton}
+            onPress={() => setShowLanguageSelector(true)}>
+            <ThemedText style={styles.languageText} lightColor="white" darkColor="white">
+              {getLanguageName(selectedLanguage)}
+            </ThemedText>
+          </TouchableOpacity>
+        </View>
         <View style={styles.buttonContainer}>
           <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
             <ThemedText style={styles.text} lightColor="white" darkColor="white">
@@ -51,6 +84,11 @@ export default function CameraScreen() {
           </Link>
         </View>
       </CameraView>
+      <LanguageSelector
+        visible={showLanguageSelector}
+        onClose={() => setShowLanguageSelector(false)}
+        onLanguageSelected={handleLanguageSelected}
+      />
     </ThemedView>
   );
 }
@@ -66,6 +104,24 @@ const styles = StyleSheet.create({
   },
   camera: {
     flex: 1,
+  },
+  topBar: {
+    position: 'absolute',
+    top: 50,
+    left: 0,
+    right: 0,
+    alignItems: 'center',
+    zIndex: 1,
+  },
+  languageButton: {
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 20,
+  },
+  languageText: {
+    fontSize: 14,
+    fontWeight: '600',
   },
   buttonContainer: {
     flex: 1,
