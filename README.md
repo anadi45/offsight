@@ -1,50 +1,91 @@
-# Welcome to your Expo app 👋
+# Offsight - Flutter Camera Translation App
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A Flutter application for translating text from camera images using vision models.
 
-## Get started
+## Features
 
-1. Install dependencies
+- 📷 Camera interface for capturing images
+- 🌍 Multi-language translation support (13 languages)
+- 💾 Persistent language preferences
+- 🎨 Modern Material Design 3 UI
+- 🌓 Dark mode support
 
+## Supported Languages
+
+- English (en)
+- Spanish (es)
+- French (fr)
+- German (de)
+- Italian (it)
+- Portuguese (pt)
+- Russian (ru)
+- Japanese (ja)
+- Korean (ko)
+- Chinese (zh)
+- Arabic (ar)
+- Hindi (hi)
+
+## Setup
+
+1. Make sure you have Flutter installed:
    ```bash
-   npm install
+   flutter --version
    ```
 
-2. Start the app
-
+2. Install dependencies:
    ```bash
-   npx expo start
+   flutter pub get
    ```
 
-In the output, you'll find options to open the app in a
+3. Run the app:
+   ```bash
+   flutter run
+   ```
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## Project Structure
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
-
-## Get a fresh project
-
-When you're ready, run:
-
-```bash
-npm run reset-project
+```
+lib/
+├── main.dart                 # App entry point
+├── screens/
+│   ├── home_screen.dart      # Home screen with camera button
+│   ├── camera_screen.dart    # Camera interface
+│   └── explore_screen.dart   # Explore/info screen
+├── widgets/
+│   └── language_selector.dart # Language selection dialog
+├── providers/
+│   └── language_provider.dart # Language state management
+├── services/
+│   └── translation_service.dart # Translation service (placeholder)
+└── utils/
+    └── storage.dart          # Storage utilities
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Translation Service Integration
 
-## Learn more
+The translation service currently uses a placeholder implementation. To enable actual translation:
 
-To learn more about developing your project with Expo, look at the following resources:
+1. **CactusLM Integration**: If CactusLM has Flutter support, integrate it via platform channels or a Flutter plugin
+2. **Alternative APIs**: Consider using:
+   - Google ML Kit
+   - Firebase ML Vision
+   - Custom vision API service
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Permissions
 
-## Join the community
+The app requires camera permission. On first launch, users will be prompted to grant camera access.
 
-Join our community of developers creating universal apps.
+## Development
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+This project uses:
+- **Provider** for state management
+- **go_router** for navigation
+- **camera** for camera functionality
+- **shared_preferences** for local storage
+
+## Notes
+
+- The translation service needs to be integrated with an actual vision model API
+- Camera functionality is fully implemented
+- Language selection and storage are working
+- UI follows Material Design 3 guidelines
