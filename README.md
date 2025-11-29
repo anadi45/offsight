@@ -17,19 +17,25 @@ A React Native app for camera-based translation.
    npm install
    ```
 
-2. Install iOS CocoaPods dependencies:
+2. Generate prebuild folders (if needed):
+
+   ```bash
+   npx expo prebuild
+   ```
+
+3. Install iOS CocoaPods dependencies:
 
    ```bash
    cd ios && pod install && cd ..
    ```
 
-3. Start the Metro bundler:
+4. Start the Metro bundler:
 
    ```bash
    npm start
    ```
 
-4. Run the app:
+5. Run the app:
 
    **iOS:**
    ```bash

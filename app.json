@@ -1,0 +1,8 @@
+{
+  "android": {
+    "package": "com.anadi45.offsight"
+  },
+  "ios": {
+    "bundleIdentifier": "com.anadi45.offsight"
+  }
+}
