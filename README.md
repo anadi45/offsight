@@ -60,8 +60,13 @@ A React Native app for camera-based translation.
 - **TypeScript** - Type safety
 - **Metro bundler** - JavaScript bundling
 
-## Learn More
+## Troubleshooting
 
-- [React Native documentation](https://reactnative.dev/docs/getting-started)
-- [React Navigation documentation](https://reactnavigation.org/)
-- [Metro bundler documentation](https://metrobundler.dev/)
+### iOS Build Errors
+
+If you encounter build errors when running `npm run ios`, you can debug them by opening the project in Xcode:
+
+1. Open the Xcode workspace:
+   ```bash
+   open ios/offsight.xcworkspace
+   ```
