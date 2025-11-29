@@ -121,7 +121,7 @@ class TranslationService {
         print('Extracted translation: "$translation"');
         
         if (translation.isNotEmpty) {
-          return 'Original: $extractedText\n\nTranslation ($targetLanguageName): $translation';
+          return translation;
         }
       }
       
@@ -131,48 +131,15 @@ class TranslationService {
         final openRouterTranslation = await _translateWithOpenRouter(extractedText, targetLanguage);
         if (openRouterTranslation.isNotEmpty) {
           print('OpenRouter translation successful: $openRouterTranslation');
-          return 'Original: $extractedText\n\nTranslation ($targetLanguageName): $openRouterTranslation';
+          return openRouterTranslation;
         }
       } catch (e) {
         print('OpenRouter API fallback failed: $e');
       }
       
-      // Step 4: If all translation methods failed, use structured fallback
-      print('Using structured fallback translation');
-      var lines = extractedText.split('\n');
-      var translatedLines = <String>[];
-      
-      for (var line in lines) {
-        if (line.trim().isNotEmpty) {
-          var words = line.trim().toLowerCase();
-          if (words.contains('food')) {
-            translatedLines.add('भोजन');
-          } else if (words.contains('for')) {
-            translatedLines.add('के लिए');
-          } else if (words.contains('every')) {
-            translatedLines.add('हर');
-          } else if (words.contains('mood')) {
-            translatedLines.add('मूड');
-          } else if (words.contains('delivered')) {
-            translatedLines.add('डिलीवर');
-          } else if (words.contains('minutes')) {
-            translatedLines.add('मिनट में');
-          } else if (words.contains('10')) {
-            translatedLines.add('10');
-          } else if (words.contains('in')) {
-            translatedLines.add('में');
-          } else {
-            translatedLines.add('टेक्स्ट'); // Generic fallback
-          }
-        } else {
-          translatedLines.add(''); // Preserve empty lines
-        }
-      }
-      
-      var translation = translatedLines.join('\n');
-      print('Translation completed: $translation');
-      
-      return 'Original: $extractedText\n\nTranslation ($targetLanguageName): $translation';
+      // If all translation methods failed, return error message
+      print('All translation methods failed - returning original text');
+      return '[Translation unavailable]';
       
     } catch (e) {
       print('Error in OCR + translation process: $e');
