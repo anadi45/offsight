@@ -64,3 +64,8 @@ app/
 package.json
 setup-env.sh
 expo-env.d.ts
+
+# API Keys and secrets - DO NOT COMMIT
+lib/config/api_keys.dart
+*.env
+.env.*

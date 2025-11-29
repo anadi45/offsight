@@ -1,0 +1,8 @@
+// ⚠️ DO NOT COMMIT THIS FILE TO GITHUB !!!
+// Copy this file to api_keys.dart and add your actual API key
+// If a key is exposed, it is automatically blocked - you'll ruin the fun for everyone :)
+
+/// OpenRouter API key for cloud fallback translation
+/// Get your key from: https://openrouter.ai/keys
+const String openRouterApiKey = 'YOUR_OPENROUTER_API_KEY_HERE';
+
