@@ -1,3 +1,5 @@
+import { useNavigation } from '@react-navigation/native';
+import type { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useEffect, useState } from 'react';
 import { StyleSheet, TouchableOpacity } from 'react-native';
 
@@ -5,10 +7,17 @@ import { LanguageSelector } from '@/components/language-selector';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { getSelectedLanguage } from '@/src/utils/storage';
-import { useRouter } from 'expo-router';
+
+type RootStackParamList = {
+  '(tabs)': undefined;
+  camera: undefined;
+  modal: undefined;
+};
+
+type NavigationProp = NativeStackNavigationProp<RootStackParamList>;
 
 export default function HomeScreen() {
-  const router = useRouter();
+  const navigation = useNavigation<NavigationProp>();
   const [showLanguageSelector, setShowLanguageSelector] = useState(false);
   const [hasSelectedLanguage, setHasSelectedLanguage] = useState(false);
 
@@ -23,7 +32,7 @@ export default function HomeScreen() {
 
   function handleCameraPress() {
     if (hasSelectedLanguage) {
-      router.push('/camera');
+      navigation.navigate('camera');
     } else {
       setShowLanguageSelector(true);
     }
@@ -31,7 +40,7 @@ export default function HomeScreen() {
 
   function handleLanguageSelected() {
     setHasSelectedLanguage(true);
-    router.push('/camera');
+    navigation.navigate('camera');
   }
 
   return (

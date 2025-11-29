@@ -1,50 +1,78 @@
-# Welcome to your Expo app 👋
+# offsight
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A React Native app for camera-based translation.
 
-## Get started
+## Prerequisites
 
-1. Install dependencies
+- Node.js (v18 or higher)
+- React Native development environment
+  - **iOS**: Xcode and CocoaPods
+  - **Android**: Android Studio and Android SDK
+
+## Getting Started
+
+1. Install dependencies:
 
    ```bash
    npm install
    ```
 
-2. Start the app
+2. Generate prebuild folders (if needed):
 
    ```bash
-   npx expo start
+   npx expo prebuild
    ```
 
-In the output, you'll find options to open the app in a
+3. Install iOS CocoaPods dependencies:
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+   ```bash
+   cd ios && pod install && cd ..
+   ```
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+4. Start the Metro bundler:
 
-## Get a fresh project
+   ```bash
+   npm start
+   ```
 
-When you're ready, run:
+5. Run the app:
 
-```bash
-npm run reset-project
-```
+   **iOS:**
+   ```bash
+   npm run ios
+   ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+   **Android:**
+   ```bash
+   npm run android
+   ```
 
-## Learn more
+## Project Structure
 
-To learn more about developing your project with Expo, look at the following resources:
+- `App.tsx` - Root component with navigation setup
+- `app/` - Screen components
+  - `(tabs)/` - Tab navigation screens
+  - `camera.tsx` - Camera translation screen
+  - `modal.tsx` - Modal screen
+- `components/` - Reusable UI components
+- `src/` - Feature modules and utilities
+- `hooks/` - Custom React hooks
 
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
+## Tech Stack
 
-## Join the community
+- **React Native** 0.81.5
+- **React Navigation** - Navigation
+- **react-native-vision-camera** - Camera functionality
+- **TypeScript** - Type safety
+- **Metro bundler** - JavaScript bundling
 
-Join our community of developers creating universal apps.
+## Troubleshooting
 
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+### iOS Build Errors
+
+If you encounter build errors when running `npm run ios`, you can debug them by opening the project in Xcode:
+
+1. Open the Xcode workspace:
+   ```bash
+   open ios/offsight.xcworkspace
+   ```

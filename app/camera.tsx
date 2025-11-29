@@ -1,7 +1,7 @@
-import { CameraView, useCameraPermissions } from 'expo-camera';
-import { Link } from 'expo-router';
+import { useNavigation } from '@react-navigation/native';
 import { useEffect, useRef, useState } from 'react';
-import { ActivityIndicator, Button, Modal, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Button, Linking, Modal, Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Camera, useCameraDevice, useCameraPermission } from 'react-native-vision-camera';
 
 import { LanguageSelector } from '@/components/language-selector';
 import { ThemedText } from '@/components/themed-text';
@@ -11,9 +11,10 @@ import { translateText } from '@/src/features/translation/utils/translation';
 import { getSelectedLanguage, SUPPORTED_LANGUAGES } from '@/src/utils/storage';
 
 export default function CameraScreen() {
-  const cameraRef = useRef<CameraView>(null);
-  const [facing, setFacing] = useState<'back' | 'front'>('back');
-  const [permission, requestPermission] = useCameraPermissions();
+  const cameraRef = useRef<Camera>(null);
+  const device = useCameraDevice('back');
+  const { hasPermission, requestPermission } = useCameraPermission();
+  const navigation = useNavigation();
   const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
   const [showLanguageSelector, setShowLanguageSelector] = useState(false);
   const [isProcessing, setIsProcessing] = useState(false);
@@ -40,27 +41,49 @@ export default function CameraScreen() {
     // Language is already saved by LanguageSelector component
   }
 
-  if (!permission) {
-    // Camera permissions are still loading
-    return (
-      <ThemedView style={styles.container}>
-        <ThemedText>Loading camera permissions...</ThemedText>
-      </ThemedView>
-    );
-  }
-
-  if (!permission.granted) {
+  if (!hasPermission) {
     // Camera permissions are not granted yet
     return (
       <ThemedView style={styles.container}>
         <ThemedText style={styles.message}>We need your permission to show the camera</ThemedText>
-        <Button onPress={requestPermission} title="Grant Permission" />
+        <Button
+          onPress={async () => {
+            try {
+              const result = await requestPermission();
+              if (!result) {
+                // Permission denied, open settings
+                if (Platform.OS === 'ios') {
+                  await Linking.openURL('app-settings:');
+                } else {
+                  await Linking.openSettings();
+                }
+              }
+            } catch (error) {
+              console.error('Error requesting camera permission:', error);
+              // If permission request fails, try to open settings
+              try {
+                if (Platform.OS === 'ios') {
+                  await Linking.openURL('app-settings:');
+                } else {
+                  await Linking.openSettings();
+                }
+              } catch (linkError) {
+                console.error('Error opening settings:', linkError);
+              }
+            }
+          }}
+          title="Grant Permission"
+        />
       </ThemedView>
     );
   }
 
-  function toggleCameraFacing() {
-    setFacing((current) => (current === 'back' ? 'front' : 'back'));
+  if (!device) {
+    return (
+      <ThemedView style={styles.container}>
+        <ThemedText>Camera device not available</ThemedText>
+      </ThemedView>
+    );
   }
 
   async function handleTakePhoto() {
@@ -73,17 +96,18 @@ export default function CameraScreen() {
       setTranslatedText(null);
 
       // Take a photo
-      const photo = await cameraRef.current.takePictureAsync({
-        quality: 0.8,
-        base64: false,
+      const photo = await cameraRef.current.takePhoto({
+        flash: 'off',
       });
 
-      if (!photo?.uri) {
+      if (!photo?.path) {
         throw new Error('Failed to capture photo');
       }
 
       // Extract text from image using OCR
-      const detectedText = await extractTextFromImage(photo.uri);
+      // Note: react-native-vision-camera returns a file path, not a URI
+      const fileUri = Platform.OS === 'ios' ? photo.path : `file://${photo.path}`;
+      const detectedText = await extractTextFromImage(fileUri);
       
       // Translate the detected text
       const translation = await translateText(detectedText, selectedLanguage);
@@ -100,7 +124,7 @@ export default function CameraScreen() {
 
   return (
     <ThemedView style={styles.container}>
-      <CameraView ref={cameraRef} style={styles.camera} facing={facing}>
+      <Camera ref={cameraRef} device={device} isActive={true} photo={true} style={styles.camera}>
         <View style={styles.topBar}>
           <TouchableOpacity
             style={styles.languageButton}
@@ -112,18 +136,11 @@ export default function CameraScreen() {
         </View>
         <View style={styles.bottomContainer}>
           <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
+            <TouchableOpacity style={styles.closeButton} onPress={() => navigation.goBack()}>
               <ThemedText style={styles.text} lightColor="white" darkColor="white">
-                Flip
+                Close
               </ThemedText>
             </TouchableOpacity>
-            <Link href="/" asChild>
-              <TouchableOpacity style={styles.closeButton}>
-                <ThemedText style={styles.text} lightColor="white" darkColor="white">
-                  Close
-                </ThemedText>
-              </TouchableOpacity>
-            </Link>
           </View>
           <TouchableOpacity
             style={[styles.captureButton, isProcessing && styles.captureButtonDisabled]}
@@ -136,7 +153,7 @@ export default function CameraScreen() {
             )}
           </TouchableOpacity>
         </View>
-      </CameraView>
+      </Camera>
       <LanguageSelector
         visible={showLanguageSelector}
         onClose={() => setShowLanguageSelector(false)}
