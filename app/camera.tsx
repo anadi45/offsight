@@ -48,13 +48,27 @@ export default function CameraScreen() {
         <ThemedText style={styles.message}>We need your permission to show the camera</ThemedText>
         <Button
           onPress={async () => {
-            const result = await requestPermission();
-            if (!result) {
-              // Permission denied, open settings
-              if (Platform.OS === 'ios') {
-                Linking.openURL('app-settings:');
-              } else {
-                Linking.openSettings();
+            try {
+              const result = await requestPermission();
+              if (!result) {
+                // Permission denied, open settings
+                if (Platform.OS === 'ios') {
+                  await Linking.openURL('app-settings:');
+                } else {
+                  await Linking.openSettings();
+                }
+              }
+            } catch (error) {
+              console.error('Error requesting camera permission:', error);
+              // If permission request fails, try to open settings
+              try {
+                if (Platform.OS === 'ios') {
+                  await Linking.openURL('app-settings:');
+                } else {
+                  await Linking.openSettings();
+                }
+              } catch (linkError) {
+                console.error('Error opening settings:', linkError);
               }
             }
           }}
