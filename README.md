@@ -1,6 +1,48 @@
-# Welcome to your Expo app 👋
+# Offsight
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+A React Native app for camera-based translation using Metro bundler.
+
+## Prerequisites
+
+- Node.js (v18 or higher)
+- React Native development environment set up
+  - For iOS: Xcode and CocoaPods
+  - For Android: Android Studio and Android SDK
+
+## Initial Setup
+
+Since this project was migrated from Expo, you need to initialize the native iOS and Android projects first.
+
+### Option 1: Initialize Native Projects (Recommended)
+
+1. Create a temporary React Native project to get the native folders:
+
+   ```bash
+   npx react-native init TempProject --version 0.81.5
+   ```
+
+2. Copy the native folders to your project:
+
+   ```bash
+   cp -r TempProject/ios .
+   cp -r TempProject/android .
+   rm -rf TempProject
+   ```
+
+3. Update the native project names:
+   - **iOS**: Open `ios/offsight.xcworkspace` in Xcode and update the project name if needed
+   - **Android**: Update `android/app/src/main/res/values/strings.xml` with your app name
+
+### Option 2: Use React Native CLI (Alternative)
+
+If you have React Native CLI installed globally:
+
+```bash
+npx @react-native-community/cli init OffsightTemp --skip-install
+cp -r OffsightTemp/ios .
+cp -r OffsightTemp/android .
+rm -rf OffsightTemp
+```
 
 ## Get started
 
@@ -10,41 +52,51 @@ This is an [Expo](https://expo.dev) project created with [`create-expo-app`](htt
    npm install
    ```
 
-2. Start the app
+2. For iOS, install CocoaPods dependencies
 
    ```bash
-   npx expo start
+   cd ios && pod install && cd ..
    ```
 
-In the output, you'll find options to open the app in a
+3. Start the Metro bundler
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+   ```bash
+   npm start
+   ```
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+4. Run the app
 
-## Get a fresh project
+   For iOS:
+   ```bash
+   npm run ios
+   ```
 
-When you're ready, run:
+   For Android:
+   ```bash
+   npm run android
+   ```
 
-```bash
-npm run reset-project
-```
+## Project Structure
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+- `App.tsx` - Root component with navigation setup
+- `app/` - Screen components
+  - `(tabs)/` - Tab navigation screens
+  - `camera.tsx` - Camera translation screen
+  - `modal.tsx` - Modal screen
+- `components/` - Reusable UI components
+- `src/` - Feature modules and utilities
+- `hooks/` - Custom React hooks
+
+## Development
+
+The app uses:
+- **React Navigation** for navigation
+- **Metro bundler** for JavaScript bundling
+- **react-native-vision-camera** for camera functionality
+- **TypeScript** for type safety
 
 ## Learn more
 
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+- [React Native documentation](https://reactnative.dev/docs/getting-started)
+- [React Navigation documentation](https://reactnavigation.org/)
+- [Metro bundler documentation](https://metrobundler.dev/)
