@@ -8,12 +8,18 @@ import 'screens/camera_screen.dart';
 import 'screens/explore_screen.dart';
 import 'providers/language_provider.dart';
 import 'utils/storage.dart';
+import 'services/translation_service.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
   // Initialize shared preferences
   final prefs = await SharedPreferences.getInstance();
+  
+  // Pre-initialize translation service in background for faster first use
+  TranslationService.preInitialize().catchError((error) {
+    print('Background pre-initialization failed: $error');
+  });
   
   runApp(
     ChangeNotifierProvider(

@@ -96,8 +96,7 @@ class _CameraScreenState extends State<CameraScreen> {
 
       final image = await _controller!.takePicture();
       
-      // Note: In a real implementation, you would integrate with CactusLM here
-      // For now, we'll simulate the translation
+      // Use Cactus vision model to extract and translate text from image
       final translation = await TranslationService.translateImageText(
         image.path,
         languageProvider.selectedLanguage!,
@@ -109,13 +108,29 @@ class _CameraScreenState extends State<CameraScreen> {
         _isProcessing = false;
       });
     } catch (e) {
-      print('Error taking photo: $e');
+      print('Error processing photo: $e');
       if (mounted) {
         setState(() {
           _isProcessing = false;
         });
+        
+        String errorMessage = 'Error processing photo';
+        if (e.toString().contains('Vision model not initialized')) {
+          errorMessage = 'Vision model is loading. Please try again in a moment.';
+        } else if (e.toString().contains('Translation failed')) {
+          errorMessage = 'Unable to translate text. Please try again.';
+        } else if (e.toString().contains('No text found')) {
+          errorMessage = 'No text detected in image. Try taking a clearer photo.';
+        } else if (e.toString().contains('timed out')) {
+          errorMessage = 'Translation took too long. Try with a simpler image or check your connection.';
+        }
+        
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Error processing photo: $e')),
+          SnackBar(
+            content: Text(errorMessage),
+            duration: const Duration(seconds: 3),
+            backgroundColor: Colors.red.shade600,
+          ),
         );
       }
     }
@@ -237,7 +252,13 @@ class _CameraScreenState extends State<CameraScreen> {
                       children: [
                         Expanded(
                           child: ElevatedButton(
-                            onPressed: () => context.pop(),
+                            onPressed: () {
+                              if (Navigator.canPop(context)) {
+                                Navigator.pop(context);
+                              } else {
+                                context.go('/');
+                              }
+                            },
                             style: ElevatedButton.styleFrom(
                               backgroundColor: Colors.red.withOpacity(0.7),
                               padding: const EdgeInsets.symmetric(vertical: 15),
