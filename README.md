@@ -1,77 +1,42 @@
 # Offsight
 
-A React Native app for camera-based translation using Metro bundler.
+A React Native app for camera-based translation.
 
 ## Prerequisites
 
 - Node.js (v18 or higher)
-- React Native development environment set up
-  - For iOS: Xcode and CocoaPods
-  - For Android: Android Studio and Android SDK
+- React Native development environment
+  - **iOS**: Xcode and CocoaPods
+  - **Android**: Android Studio and Android SDK
 
-## Initial Setup
+## Getting Started
 
-Since this project was migrated from Expo, you need to initialize the native iOS and Android projects first.
-
-### Option 1: Initialize Native Projects (Recommended)
-
-1. Create a temporary React Native project to get the native folders:
-
-   ```bash
-   npx react-native init TempProject --version 0.81.5
-   ```
-
-2. Copy the native folders to your project:
-
-   ```bash
-   cp -r TempProject/ios .
-   cp -r TempProject/android .
-   rm -rf TempProject
-   ```
-
-3. Update the native project names:
-   - **iOS**: Open `ios/offsight.xcworkspace` in Xcode and update the project name if needed
-   - **Android**: Update `android/app/src/main/res/values/strings.xml` with your app name
-
-### Option 2: Use React Native CLI (Alternative)
-
-If you have React Native CLI installed globally:
-
-```bash
-npx @react-native-community/cli init OffsightTemp --skip-install
-cp -r OffsightTemp/ios .
-cp -r OffsightTemp/android .
-rm -rf OffsightTemp
-```
-
-## Get started
-
-1. Install dependencies
+1. Install dependencies:
 
    ```bash
    npm install
    ```
 
-2. For iOS, install CocoaPods dependencies
+2. Install iOS CocoaPods dependencies:
 
    ```bash
    cd ios && pod install && cd ..
    ```
 
-3. Start the Metro bundler
+3. Start the Metro bundler:
 
    ```bash
    npm start
    ```
 
-4. Run the app
+4. Run the app:
 
-   For iOS:
+   **iOS:**
    ```bash
    npm run ios
    ```
 
-   For Android:
+   **Android:**
    ```bash
    npm run android
    ```
@@ -87,15 +52,15 @@ rm -rf OffsightTemp
 - `src/` - Feature modules and utilities
 - `hooks/` - Custom React hooks
 
-## Development
+## Tech Stack
 
-The app uses:
-- **React Navigation** for navigation
-- **Metro bundler** for JavaScript bundling
-- **react-native-vision-camera** for camera functionality
-- **TypeScript** for type safety
+- **React Native** 0.81.5
+- **React Navigation** - Navigation
+- **react-native-vision-camera** - Camera functionality
+- **TypeScript** - Type safety
+- **Metro bundler** - JavaScript bundling
 
-## Learn more
+## Learn More
 
 - [React Native documentation](https://reactnative.dev/docs/getting-started)
 - [React Navigation documentation](https://reactnavigation.org/)
