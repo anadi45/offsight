@@ -3,7 +3,7 @@
   "main": "index.js",
   "version": "1.0.0",
   "scripts": {
-    "start": "react-native start --reset-cache",
+    "start": "NODE_OPTIONS='--max-http-header-size=32768 --no-warnings' react-native start --reset-cache",
     "reset-project": "node ./scripts/reset-project.js",
     "android": "react-native run-android",
     "ios": "react-native run-ios",

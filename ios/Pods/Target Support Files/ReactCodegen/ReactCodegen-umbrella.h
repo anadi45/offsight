@@ -10,6 +10,8 @@
 #endif
 #endif
 
+#import "NitroModulesSpec/NitroModulesSpec.h"
+#import "NitroModulesSpecJSI.h"
 #import "RCTModuleProviders.h"
 #import "RCTModulesConformingToProtocolsProvider.h"
 #import "RCTThirdPartyComponentsProvider.h"

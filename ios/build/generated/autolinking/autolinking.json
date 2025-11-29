@@ -28,6 +28,30 @@
         }
       }
     },
+    "cactus-react-native": {
+      "root": "/Users/ranjeetbaraik/Desktop/personal/offsight/node_modules/cactus-react-native",
+      "name": "cactus-react-native",
+      "platforms": {
+        "ios": {
+          "podspecPath": "/Users/ranjeetbaraik/Desktop/personal/offsight/node_modules/cactus-react-native/Cactus.podspec",
+          "version": "1.2.0",
+          "configurations": [],
+          "scriptPhases": []
+        },
+        "android": {
+          "sourceDir": "/Users/ranjeetbaraik/Desktop/personal/offsight/node_modules/cactus-react-native/android",
+          "packageImportPath": "import com.margelo.nitro.cactus.CactusPackage;",
+          "packageInstance": "new CactusPackage()",
+          "buildTypes": [],
+          "componentDescriptors": [],
+          "cmakeListsPath": "/Users/ranjeetbaraik/Desktop/personal/offsight/node_modules/cactus-react-native/android/build/generated/source/codegen/jni/CMakeLists.txt",
+          "cxxModuleCMakeListsModuleName": null,
+          "cxxModuleCMakeListsPath": null,
+          "cxxModuleHeaderName": null,
+          "isPureCxxDependency": false
+        }
+      }
+    },
     "react-native-gesture-handler": {
       "root": "/Users/ranjeetbaraik/Desktop/personal/offsight/node_modules/react-native-gesture-handler",
       "name": "react-native-gesture-handler",
@@ -99,6 +123,31 @@
           "libraryName": "RNImagePickerSpec",
           "componentDescriptors": [],
           "cmakeListsPath": "/Users/ranjeetbaraik/Desktop/personal/offsight/node_modules/react-native-image-picker/android/build/generated/source/codegen/jni/CMakeLists.txt",
+          "cxxModuleCMakeListsModuleName": null,
+          "cxxModuleCMakeListsPath": null,
+          "cxxModuleHeaderName": null,
+          "isPureCxxDependency": false
+        }
+      }
+    },
+    "react-native-nitro-modules": {
+      "root": "/Users/ranjeetbaraik/Desktop/personal/offsight/node_modules/react-native-nitro-modules",
+      "name": "react-native-nitro-modules",
+      "platforms": {
+        "ios": {
+          "podspecPath": "/Users/ranjeetbaraik/Desktop/personal/offsight/node_modules/react-native-nitro-modules/NitroModules.podspec",
+          "version": "0.31.10",
+          "configurations": [],
+          "scriptPhases": []
+        },
+        "android": {
+          "sourceDir": "/Users/ranjeetbaraik/Desktop/personal/offsight/node_modules/react-native-nitro-modules/android",
+          "packageImportPath": "import com.margelo.nitro.NitroModulesPackage;",
+          "packageInstance": "new NitroModulesPackage()",
+          "buildTypes": [],
+          "libraryName": "NitroModulesSpec",
+          "componentDescriptors": [],
+          "cmakeListsPath": "/Users/ranjeetbaraik/Desktop/personal/offsight/node_modules/react-native-nitro-modules/android/build/generated/source/codegen/jni/CMakeLists.txt",
           "cxxModuleCMakeListsModuleName": null,
           "cxxModuleCMakeListsPath": null,
           "cxxModuleHeaderName": null,
@@ -703,9 +752,9 @@
     "ios": {
       "sourceDir": "/Users/ranjeetbaraik/Desktop/personal/offsight/ios",
       "xcodeProject": {
-        "name": "offsight.xcodeproj",
+        "name": "offsight.xcworkspace",
         "path": ".",
-        "isWorkspace": false
+        "isWorkspace": true
       },
       "assets": []
     },

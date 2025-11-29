@@ -1,0 +1,2 @@
+${PODS_XCFRAMEWORKS_BUILD_DIR}/Cactus/cactus.framework
+${PODS_XCFRAMEWORKS_BUILD_DIR}/Cactus/cactus_util.framework

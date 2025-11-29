@@ -1,6 +1,47 @@
 # Acknowledgements
 This application makes use of the following third party libraries:
 
+## Cactus
+
+Copyright (c) 2025 Cactus Compute, Inc. All Rights Reserved.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to use,
+copy, modify, merge, publish, and distribute the Software, and to permit 
+persons to whom the Software is furnished to do so, subject to the following 
+conditions:
+
+1. The above copyright notice and this permission notice shall be included in all
+   copies or substantial portions of the Software.
+
+2. This grant of permission applies only to:
+   (a) Individual persons using the Software for personal, educational, 
+       research, or non-commercial purposes;
+   (b) Organizations (including their parent companies and subsidiaries) with both:
+       (i) Less than $2,000,000 USD in total funding (including but not limited to
+           equity investments, debt financing, grants, and loans); AND
+       (ii) Less than $2,000,000 USD in gross annual revenue;
+   (c) Educational institutions and students;
+   (d) Non-profit organizations registered under section 501(c)(3) of the 
+       United States Internal Revenue Code or equivalent in other jurisdictions.
+
+3. Any person or organization not meeting the criteria in Section 2 must obtain
+   a separate commercial license from Cactus Compute, Inc. Contact 
+   founders@cactuscompute.com for licensing terms.
+
+4. If an organization qualifying under Section 2(b) subsequently exceeds either
+   threshold, this permission automatically terminates and a commercial license
+   must be obtained within thirty (30) days. For purposes of this license,
+   "gross annual revenue" means total revenue in the preceding 12 months.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
 ## DoubleConversion
 
 Copyright 2006-2011, the V8 project authors. All rights reserved.
@@ -465,6 +506,31 @@ LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON
 ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
 (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
 SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+
+## ZIPFoundation
+
+MIT License
+
+Copyright (c) 2017-2025 Thomas Zoechling (https://www.peakstep.com)
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
 
 ## boost
 
