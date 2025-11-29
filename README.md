@@ -2,6 +2,11 @@
 
 A Flutter application for translating text from camera images using vision models.
 
+## Demo
+
+Check out the demo video to see the app in action:
+- [demo.mp4](demo.mp4) - Video demonstration of the app's features
+
 ## Features
 
 - 📷 Camera interface for capturing images
