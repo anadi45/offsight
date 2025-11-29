@@ -42,6 +42,11 @@ A Flutter application for translating text from camera images using vision model
    flutter run
    ```
 
+## Builds
+
+A pre-built release APK is available in the root directory:
+- [app-release.apk](app-release.apk) - Release build of the app ready for installation on Android devices
+
 ## Project Structure
 
 ```
