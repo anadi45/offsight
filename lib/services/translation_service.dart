@@ -94,46 +94,80 @@ class TranslationService {
       final extractedText = recognizedText.text.trim();
       print('Extracted text: $extractedText');
       
-      // Step 2: Translate using Cactus LLM
-      print('Translating text to $targetLanguageName...');
-      final translationResult = await _cactusLM!.generateCompletion(
-        messages: [
-          ChatMessage(
-            content: 'You are a direct translator. Translate the following text to $targetLanguageName. Only respond with the translation, nothing else. Do not add explanations, thinking, or any other text.',
-            role: 'system',
-          ),
-          ChatMessage(
-            content: extractedText,
-            role: 'user',
-          ),
-        ],
-        params: CactusCompletionParams(
-          temperature: 0.0,
-        ),
+      // Step 2: Translate using both Cactus LLM and OpenRouter in parallel
+      print('Translating text to $targetLanguageName using Cactus LM and OpenRouter in parallel...');
+      
+      // Create both translation futures with error handling
+      final cactusFuture = _translateWithCactus(extractedText, targetLanguage)
+          .catchError((e) {
+        print('Cactus LM error: $e');
+        return '';
+      });
+      
+      final openRouterFuture = _translateWithOpenRouter(extractedText, targetLanguage)
+          .catchError((e) {
+        print('OpenRouter error: $e');
+        return '';
+      });
+      
+      // Race both translations - use whichever completes first with a valid result
+      final completer = Completer<String>();
+      var completedCount = 0;
+      var hasValidResult = false;
+      
+      // Listen to both futures and complete when first valid result arrives
+      cactusFuture.then((result) {
+        completedCount++;
+        if (!hasValidResult && result.isNotEmpty) {
+          hasValidResult = true;
+          if (!completer.isCompleted) {
+            print('Translation completed using Cactus (first result): $result');
+            completer.complete(result);
+          }
+        } else if (completedCount == 2 && !hasValidResult && !completer.isCompleted) {
+          // Both completed but no valid result yet, check the other one
+          completer.complete('');
+        }
+      });
+      
+      openRouterFuture.then((result) {
+        completedCount++;
+        if (!hasValidResult && result.isNotEmpty) {
+          hasValidResult = true;
+          if (!completer.isCompleted) {
+            print('Translation completed using OpenRouter (first result): $result');
+            completer.complete(result);
+          }
+        } else if (completedCount == 2 && !hasValidResult && !completer.isCompleted) {
+          // Both completed but no valid result yet
+          completer.complete('');
+        }
+      });
+      
+      // Wait for first result
+      final firstResult = await completer.future.timeout(
+        const Duration(seconds: 60),
+        onTimeout: () {
+          print('Timeout waiting for translation results');
+          return '';
+        },
       );
       
-      if (translationResult.success && translationResult.response.trim().isNotEmpty) {
-        print('Raw LLM response: "${translationResult.response}"');
-        
-        // Extract translated text from response
-        var translation = _extractTranslatedText(translationResult.response.trim(), targetLanguage);
-        print('Extracted translation: "$translation"');
-        
-        if (translation.isNotEmpty) {
-          return translation;
-        }
+      if (firstResult.isNotEmpty) {
+        return firstResult;
       }
       
-      // Step 3: Fallback to OpenRouter API if Cactus LLM failed
-      print('Cactus LLM translation failed, trying OpenRouter API fallback...');
-      try {
-        final openRouterTranslation = await _translateWithOpenRouter(extractedText, targetLanguage);
-        if (openRouterTranslation.isNotEmpty) {
-          print('OpenRouter translation successful: $openRouterTranslation');
-          return openRouterTranslation;
+      // If no valid result from the race, wait for both to complete and check
+      final results = await Future.wait([
+        cactusFuture,
+        openRouterFuture,
+      ], eagerError: false);
+      
+      for (var result in results) {
+        if (result.isNotEmpty) {
+          print('Translation completed: $result');
+          return result;
         }
-      } catch (e) {
-        print('OpenRouter API fallback failed: $e');
       }
       
       // If all translation methods failed, return error message
@@ -165,6 +199,54 @@ class TranslationService {
     _isInitialized = false;
   }
   
+  /// Translate text using Cactus LM
+  static Future<String> _translateWithCactus(
+    String text,
+    String targetLanguage,
+  ) async {
+    try {
+      if (_cactusLM == null || !_isInitialized) {
+        print('Cactus LM not initialized, skipping...');
+        return '';
+      }
+      
+      final targetLanguageName = languageNames[targetLanguage] ?? targetLanguage;
+      
+      print('Translating with Cactus LM to $targetLanguageName...');
+      final translationResult = await _cactusLM!.generateCompletion(
+        messages: [
+          ChatMessage(
+            content: 'You are a direct translator. Translate the following text to $targetLanguageName. Only respond with the translation, nothing else. Do not add explanations, thinking, or any other text.',
+            role: 'system',
+          ),
+          ChatMessage(
+            content: text,
+            role: 'user',
+          ),
+        ],
+        params: CactusCompletionParams(
+          temperature: 0.0,
+        ),
+      );
+      
+      if (translationResult.success && translationResult.response.trim().isNotEmpty) {
+        print('Raw Cactus LLM response: "${translationResult.response}"');
+        
+        // Extract translated text from response
+        var translation = _extractTranslatedText(translationResult.response.trim(), targetLanguage);
+        print('Extracted Cactus translation: "$translation"');
+        
+        if (translation.isNotEmpty) {
+          return translation;
+        }
+      }
+    } catch (e) {
+      print('Cactus LM translation error: $e');
+    }
+    
+    return '';
+  }
+
   /// Translate text using OpenRouter API as fallback
   static Future<String> _translateWithOpenRouter(
     String text,
