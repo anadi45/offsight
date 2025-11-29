@@ -99,7 +99,7 @@ class TranslationService {
       final translationResult = await _cactusLM!.generateCompletion(
         messages: [
           ChatMessage(
-            content: 'You are a direct translator. Only respond with the translation, nothing else.',
+            content: 'You are a direct translator. Translate the following text to $targetLanguageName. Only respond with the translation, nothing else. Do not add explanations, thinking, or any other text.',
             role: 'system',
           ),
           ChatMessage(
@@ -109,7 +109,6 @@ class TranslationService {
         ],
         params: CactusCompletionParams(
           temperature: 0.0,
-          stopSequences: ["<", "think", "Okay", "Let's", "The", "I'll", "First"],
         ),
       );
       
