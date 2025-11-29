@@ -58,3 +58,9 @@ yarn-error.log*
 # Android build artifacts  
 android/build/
 android/app/build/
+
+# React Native legacy files (not used in Flutter)
+app/
+package.json
+setup-env.sh
+expo-env.d.ts
