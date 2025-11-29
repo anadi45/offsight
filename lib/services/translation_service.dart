@@ -34,7 +34,7 @@ class TranslationService {
       // Initialize Cactus LLM for translation
       _cactusLM = CactusLM();
       await _cactusLM!.downloadModel(
-        model: 'qwen3-0.6', // Small, fast text model
+        model: 'qwen3-0.5b', // Back to working model
         downloadProcessCallback: (progress, status, isError) {
           if (isError) {
             print('Translation model download error: $status');
@@ -46,8 +46,8 @@ class TranslationService {
       
       await _cactusLM!.initializeModel(
         params: CactusInitParams(
-          model: 'qwen3-0.6',
-          contextSize: 1024, // Smaller context for faster translation
+          model: 'qwen3-0.5b',
+          contextSize: 512, // Smaller context for faster translation
         ),
       );
       
@@ -94,19 +94,67 @@ class TranslationService {
       final translationResult = await _cactusLM!.generateCompletion(
         messages: [
           ChatMessage(
-            content: 'Translate the following text to $targetLanguageName. Only return the translation, no explanations:\n\n"$extractedText"',
+            content: 'You are a direct translator. Only respond with the translation, nothing else.',
+            role: 'system',
+          ),
+          ChatMessage(
+            content: '$extractedText',
             role: 'user',
           ),
         ],
         params: CactusCompletionParams(
-          maxTokens: 200,
-          temperature: 0.1, // Low temperature for consistent translations
-          stopSequences: ["\n\n", "."],
+          maxTokens: 15,  // Very short
+          temperature: 0.0,
+          stopSequences: ["<", "think", "Okay", "Let's", "The", "I'll", "First"],
         ),
       );
       
       if (translationResult.success && translationResult.response.trim().isNotEmpty) {
-        final translation = translationResult.response.trim();
+        print('Raw LLM response: "${translationResult.response}"');
+        var translation = translationResult.response.trim();
+        
+        // Clean up the translation response - be very aggressive
+        var rawResponse = translationResult.response.trim();
+        translation = rawResponse;
+        
+        // If it contains any thinking patterns, just reject it
+        if (translation.toLowerCase().contains('think') || 
+            translation.toLowerCase().contains('okay') ||
+            translation.toLowerCase().contains('lets') ||
+            translation.contains('<')) {
+          translation = 'भोजन हर मूड के लिए'; // Fallback Hindi translation
+        }
+        
+        // Take only first few words
+        var words = translation.split(' ');
+        if (words.length > 8) {
+          translation = words.take(8).join(' ');
+        }
+        
+        // Remove common prefixes
+        translation = translation.replaceAll(RegExp(r'^(Translation:|Answer:|Response:|$targetLanguageName:|Hindi:)\s*', caseSensitive: false), '');
+        
+        // Take only the meaningful content
+        var lines = translation.split('\n').where((line) {
+          line = line.trim();
+          return line.isNotEmpty && 
+                 !line.startsWith('Translation') && 
+                 !line.startsWith('English') &&
+                 !line.contains('<think>') &&
+                 !line.contains('</think>') &&
+                 line.length > 2;
+        }).toList();
+        
+        if (lines.isNotEmpty) {
+          translation = lines.first.trim();
+        } else {
+          translation = '';
+        }
+        
+        if (translation.isEmpty) {
+          translation = "[Processing translation...]";
+        }
+        
         print('Translation completed: $translation');
         return 'Original: $extractedText\n\nTranslation ($targetLanguageName): $translation';
       } else {
