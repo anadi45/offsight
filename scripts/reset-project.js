@@ -33,10 +33,20 @@ export default function Index() {
 }
 `;
 
-const layoutContent = `import { Stack } from "expo-router";
+const layoutContent = `import { Text, View } from "react-native";
 
 export default function RootLayout() {
-  return <Stack />;
+  return (
+    <View
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <Text>Edit app/_layout.tsx to edit this screen.</Text>
+    </View>
+  );
 }
 `;
 
@@ -87,7 +97,7 @@ const moveDirectories = async (userInput) => {
 
     console.log("\n✅ Project reset complete. Next steps:");
     console.log(
-      `1. Run \`npx expo start\` to start a development server.\n2. Edit app/index.tsx to edit the main screen.${
+      `1. Run \`npm start\` or \`react-native start\` to start a development server.\n2. Edit app/index.tsx to edit the main screen.${
         userInput === "y"
           ? `\n3. Delete the /${exampleDir} directory when you're done referencing it.`
           : ""

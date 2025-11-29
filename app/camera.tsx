@@ -12,7 +12,8 @@ import { getSelectedLanguage, SUPPORTED_LANGUAGES } from '@/src/utils/storage';
 
 export default function CameraScreen() {
   const cameraRef = useRef<Camera>(null);
-  const device = useCameraDevice('back');
+  const [cameraPosition, setCameraPosition] = useState<'front' | 'back'>('back');
+  const device = useCameraDevice(cameraPosition);
   const { hasPermission, requestPermission } = useCameraPermission();
   const navigation = useNavigation();
   const [selectedLanguage, setSelectedLanguage] = useState<string | null>(null);
@@ -39,6 +40,10 @@ export default function CameraScreen() {
   async function handleLanguageSelected(languageCode: string) {
     setSelectedLanguage(languageCode);
     // Language is already saved by LanguageSelector component
+  }
+
+  function handleFlipCamera() {
+    setCameraPosition((prev) => (prev === 'back' ? 'front' : 'back'));
   }
 
   if (!hasPermission) {
@@ -124,36 +129,40 @@ export default function CameraScreen() {
 
   return (
     <ThemedView style={styles.container}>
-      <Camera ref={cameraRef} device={device} isActive={true} photo={true} style={styles.camera}>
-        <View style={styles.topBar}>
-          <TouchableOpacity
-            style={styles.languageButton}
-            onPress={() => setShowLanguageSelector(true)}>
-            <ThemedText style={styles.languageText} lightColor="white" darkColor="white">
-              {getLanguageName(selectedLanguage)}
+      <Camera ref={cameraRef} device={device} isActive={true} photo={true} style={styles.camera} />
+      <View style={styles.topBar}>
+        <TouchableOpacity
+          style={styles.languageButton}
+          onPress={() => setShowLanguageSelector(true)}>
+          <ThemedText style={styles.languageText} lightColor="white" darkColor="white">
+            {getLanguageName(selectedLanguage)}
+          </ThemedText>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.flipButton} onPress={handleFlipCamera}>
+          <ThemedText style={styles.flipButtonText} lightColor="white" darkColor="white">
+            🔄
+          </ThemedText>
+        </TouchableOpacity>
+      </View>
+      <View style={styles.bottomContainer}>
+        <View style={styles.buttonContainer}>
+          <TouchableOpacity style={styles.closeButton} onPress={() => navigation.goBack()}>
+            <ThemedText style={styles.text} lightColor="white" darkColor="white">
+              Close
             </ThemedText>
           </TouchableOpacity>
         </View>
-        <View style={styles.bottomContainer}>
-          <View style={styles.buttonContainer}>
-            <TouchableOpacity style={styles.closeButton} onPress={() => navigation.goBack()}>
-              <ThemedText style={styles.text} lightColor="white" darkColor="white">
-                Close
-              </ThemedText>
-            </TouchableOpacity>
-          </View>
-          <TouchableOpacity
-            style={[styles.captureButton, isProcessing && styles.captureButtonDisabled]}
-            onPress={handleTakePhoto}
-            disabled={isProcessing || !selectedLanguage}>
-            {isProcessing ? (
-              <ActivityIndicator color="white" />
-            ) : (
-              <View style={styles.captureButtonInner} />
-            )}
-          </TouchableOpacity>
-        </View>
-      </Camera>
+        <TouchableOpacity
+          style={[styles.captureButton, isProcessing && styles.captureButtonDisabled]}
+          onPress={handleTakePhoto}
+          disabled={isProcessing || !selectedLanguage}>
+          {isProcessing ? (
+            <ActivityIndicator color="white" />
+          ) : (
+            <View style={styles.captureButtonInner} />
+          )}
+        </TouchableOpacity>
+      </View>
       <LanguageSelector
         visible={showLanguageSelector}
         onClose={() => setShowLanguageSelector(false)}
@@ -192,7 +201,7 @@ export default function CameraScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    backgroundColor: 'transparent',
   },
   message: {
     textAlign: 'center',
@@ -206,8 +215,12 @@ const styles = StyleSheet.create({
     top: 50,
     left: 0,
     right: 0,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    zIndex: 1,
+    paddingHorizontal: 20,
+    zIndex: 10,
+    pointerEvents: 'box-none',
   },
   languageButton: {
     backgroundColor: 'rgba(0, 0, 0, 0.6)',
@@ -219,6 +232,17 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
   },
+  flipButton: {
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  flipButtonText: {
+    fontSize: 20,
+  },
   bottomContainer: {
     position: 'absolute',
     bottom: 0,
@@ -227,6 +251,8 @@ const styles = StyleSheet.create({
     paddingBottom: 40,
     paddingHorizontal: 20,
     alignItems: 'center',
+    zIndex: 10,
+    pointerEvents: 'box-none',
   },
   buttonContainer: {
     flexDirection: 'row',
