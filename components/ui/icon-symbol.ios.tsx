@@ -1,16 +1,14 @@
-// iOS version - using MaterialIcons for consistency
-import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-import { ComponentProps } from 'react';
-import { OpaqueColorValue, type StyleProp, type TextStyle } from 'react-native';
+// iOS version - using Unicode symbols
+import { OpaqueColorValue, Text, type StyleProp, type TextStyle } from 'react-native';
 
-type IconMapping = Record<string, ComponentProps<typeof MaterialIcons>['name']>;
+type IconMapping = Record<string, string>;
 
-const MAPPING = {
-  'house.fill': 'home',
-  'paperplane.fill': 'send',
-  'chevron.left.forwardslash.chevron.right': 'code',
-  'chevron.right': 'chevron-right',
-} as IconMapping;
+const MAPPING: IconMapping = {
+  'house.fill': '🏠',
+  'paperplane.fill': '✈️',
+  'chevron.left.forwardslash.chevron.right': '</>',
+  'chevron.right': '›',
+};
 
 type IconSymbolName = keyof typeof MAPPING;
 
@@ -27,5 +25,16 @@ export function IconSymbol({
   style?: StyleProp<TextStyle>;
   weight?: string;
 }) {
-  return <MaterialIcons color={color} size={size} name={MAPPING[name]} style={style} />;
+  return (
+    <Text
+      style={[
+        {
+          fontSize: size,
+          color: color as string,
+        },
+        style,
+      ]}>
+      {MAPPING[name]}
+    </Text>
+  );
 }
