@@ -6,8 +6,7 @@ import { Camera, useCameraDevice, useCameraPermission } from 'react-native-visio
 import { LanguageSelector } from '@/components/language-selector';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { extractTextFromImage } from '@/src/features/translation/utils/ocr';
-import { translateText } from '@/src/features/translation/utils/translation';
+import { translateImageText } from '@/src/features/translation/utils/translation';
 import { getSelectedLanguage, SUPPORTED_LANGUAGES } from '@/src/utils/storage';
 
 export default function CameraScreen() {
@@ -109,13 +108,11 @@ export default function CameraScreen() {
         throw new Error('Failed to capture photo');
       }
 
-      // Extract text from image using OCR
-      // Note: react-native-vision-camera returns a file path, not a URI
-      const fileUri = Platform.OS === 'ios' ? photo.path : `file://${photo.path}`;
-      const detectedText = await extractTextFromImage(fileUri);
-      
-      // Translate the detected text
-      const translation = await translateText(detectedText, selectedLanguage);
+      // Use CactusLM vision model to extract text and translate it in one step
+      // Note: react-native-vision-camera returns a file path
+      // The vision model expects a file path, not a URI
+      const imagePath = photo.path;
+      const translation = await translateImageText(imagePath, selectedLanguage);
       
       setTranslatedText(translation);
       setShowResult(true);
