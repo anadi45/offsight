@@ -1,1 +1,0 @@
-../../../../../build/generated/ios/NitroModulesSpec/NitroModulesSpec.h

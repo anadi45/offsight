@@ -1,4 +1,0 @@
-${PODS_ROOT}/Target Support Files/Pods-offsight/Pods-offsight-frameworks.sh
-${PODS_XCFRAMEWORKS_BUILD_DIR}/Cactus/cactus.framework/cactus
-${PODS_XCFRAMEWORKS_BUILD_DIR}/Cactus/cactus_util.framework/cactus_util
-${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes

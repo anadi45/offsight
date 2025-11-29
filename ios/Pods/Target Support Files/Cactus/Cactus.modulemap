@@ -1,6 +1,0 @@
-module Cactus {
-  umbrella header "Cactus-umbrella.h"
-
-  export *
-  module * { export * }
-}

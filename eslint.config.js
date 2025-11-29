@@ -1,9 +1,0 @@
-const { defineConfig } = require('eslint/config');
-const reactNativeConfig = require('@react-native/eslint-config');
-
-module.exports = defineConfig([
-  reactNativeConfig,
-  {
-    ignores: ['dist/*', 'node_modules/*', 'ios/*', 'android/*'],
-  },
-]);

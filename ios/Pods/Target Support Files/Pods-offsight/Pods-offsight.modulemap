@@ -1,6 +1,0 @@
-module Pods_offsight {
-  umbrella header "Pods-offsight-umbrella.h"
-
-  export *
-  module * { export * }
-}

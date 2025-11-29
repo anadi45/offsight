@@ -1,1 +1,0 @@
-../../../../../node_modules/cactus-react-native/nitrogen/generated/shared/c++/HybridCactusCryptoSpec.hpp

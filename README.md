@@ -1,78 +1,91 @@
-# offsight
+# Offsight - Flutter Camera Translation App
 
-A React Native app for camera-based translation.
+A Flutter application for translating text from camera images using vision models.
 
-## Prerequisites
+## Features
 
-- Node.js (v18 or higher)
-- React Native development environment
-  - **iOS**: Xcode and CocoaPods
-  - **Android**: Android Studio and Android SDK
+- 📷 Camera interface for capturing images
+- 🌍 Multi-language translation support (13 languages)
+- 💾 Persistent language preferences
+- 🎨 Modern Material Design 3 UI
+- 🌓 Dark mode support
 
-## Getting Started
+## Supported Languages
 
-1. Install dependencies:
+- English (en)
+- Spanish (es)
+- French (fr)
+- German (de)
+- Italian (it)
+- Portuguese (pt)
+- Russian (ru)
+- Japanese (ja)
+- Korean (ko)
+- Chinese (zh)
+- Arabic (ar)
+- Hindi (hi)
 
+## Setup
+
+1. Make sure you have Flutter installed:
    ```bash
-   npm install
+   flutter --version
    ```
 
-2. Generate prebuild folders (if needed):
-
+2. Install dependencies:
    ```bash
-   npx expo prebuild
+   flutter pub get
    ```
 
-3. Install iOS CocoaPods dependencies:
-
+3. Run the app:
    ```bash
-   cd ios && pod install && cd ..
-   ```
-
-4. Start the Metro bundler:
-
-   ```bash
-   npm start
-   ```
-
-5. Run the app:
-
-   **iOS:**
-   ```bash
-   npm run ios
-   ```
-
-   **Android:**
-   ```bash
-   npm run android
+   flutter run
    ```
 
 ## Project Structure
 
-- `App.tsx` - Root component with navigation setup
-- `app/` - Screen components
-  - `(tabs)/` - Tab navigation screens
-  - `camera.tsx` - Camera translation screen
-  - `modal.tsx` - Modal screen
-- `components/` - Reusable UI components
-- `src/` - Feature modules and utilities
-- `hooks/` - Custom React hooks
+```
+lib/
+├── main.dart                 # App entry point
+├── screens/
+│   ├── home_screen.dart      # Home screen with camera button
+│   ├── camera_screen.dart    # Camera interface
+│   └── explore_screen.dart   # Explore/info screen
+├── widgets/
+│   └── language_selector.dart # Language selection dialog
+├── providers/
+│   └── language_provider.dart # Language state management
+├── services/
+│   └── translation_service.dart # Translation service (placeholder)
+└── utils/
+    └── storage.dart          # Storage utilities
+```
 
-## Tech Stack
+## Translation Service Integration
 
-- **React Native** 0.81.5
-- **React Navigation** - Navigation
-- **react-native-vision-camera** - Camera functionality
-- **TypeScript** - Type safety
-- **Metro bundler** - JavaScript bundling
+The translation service currently uses a placeholder implementation. To enable actual translation:
 
-## Troubleshooting
+1. **CactusLM Integration**: If CactusLM has Flutter support, integrate it via platform channels or a Flutter plugin
+2. **Alternative APIs**: Consider using:
+   - Google ML Kit
+   - Firebase ML Vision
+   - Custom vision API service
 
-### iOS Build Errors
+## Permissions
 
-If you encounter build errors when running `npm run ios`, you can debug them by opening the project in Xcode:
+The app requires camera permission. On first launch, users will be prompted to grant camera access.
 
-1. Open the Xcode workspace:
-   ```bash
-   open ios/offsight.xcworkspace
-   ```
+## Development
+
+This project uses:
+- **Provider** for state management
+- **go_router** for navigation
+- **camera** for camera functionality
+- **shared_preferences** for local storage
+
+## Notes
+
+- The translation service needs to be integrated with an actual vision model API
+- Camera functionality is fully implemented
+- Language selection and storage are working
+- UI follows Material Design 3 guidelines
