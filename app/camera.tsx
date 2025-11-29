@@ -171,7 +171,7 @@ export default function CameraScreen() {
         transparent={true}
         onRequestClose={() => setShowResult(false)}>
         <ThemedView style={styles.resultModalOverlay}>
-          <ThemedView style={styles.resultModalContent}>
+          <View style={styles.resultModalContent}>
             <View style={styles.resultHeader}>
               <ThemedText type="title" style={styles.resultTitle}>
                 Translation
@@ -181,14 +181,19 @@ export default function CameraScreen() {
               </TouchableOpacity>
             </View>
             {translatedText && (
-              <ThemedText style={styles.resultText}>{translatedText}</ThemedText>
+              <ThemedText 
+                style={styles.resultText}
+                lightColor="#000000"
+                darkColor="#FFFFFF">
+                {translatedText}
+              </ThemedText>
             )}
             <TouchableOpacity
               style={styles.dismissButton}
               onPress={() => setShowResult(false)}>
               <ThemedText style={styles.dismissButtonText}>Dismiss</ThemedText>
             </TouchableOpacity>
-          </ThemedView>
+          </View>
         </ThemedView>
       </Modal>
     </ThemedView>
@@ -305,10 +310,18 @@ const styles = StyleSheet.create({
   resultModalContent: {
     width: '90%',
     maxWidth: 400,
-    backgroundColor: 'transparent',
+    backgroundColor: '#FFFFFF',
     borderRadius: 20,
     padding: 20,
     maxHeight: '80%',
+    shadowColor: '#000',
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 8,
+    elevation: 8,
   },
   resultHeader: {
     flexDirection: 'row',
@@ -319,6 +332,7 @@ const styles = StyleSheet.create({
   resultTitle: {
     fontSize: 24,
     fontWeight: 'bold',
+    color: '#000000',
   },
   closeResultButton: {
     padding: 5,
@@ -326,14 +340,20 @@ const styles = StyleSheet.create({
   closeResultButtonText: {
     fontSize: 24,
     fontWeight: 'bold',
+    color: '#000000',
   },
   resultText: {
-    fontSize: 16,
-    lineHeight: 24,
+    fontSize: 18,
+    lineHeight: 28,
     marginBottom: 20,
-    padding: 15,
-    backgroundColor: 'rgba(0, 0, 0, 0.1)',
-    borderRadius: 10,
+    padding: 20,
+    backgroundColor: '#F5F5F5',
+    borderRadius: 12,
+    fontWeight: '600',
+    color: '#000000',
+    textShadowColor: 'rgba(255, 255, 255, 0.8)',
+    textShadowOffset: { width: 0, height: 1 },
+    textShadowRadius: 2,
   },
   dismissButton: {
     backgroundColor: 'rgba(0, 122, 255, 0.8)',
