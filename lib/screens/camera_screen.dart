@@ -293,18 +293,18 @@ class _CameraScreenState extends State<CameraScreen> {
               ),
             ),
           ),
+          // Translation result modal
+          if (_showResult)
+            _TranslationResultModal(
+              translatedText: _translatedText ?? '',
+              onDismiss: () {
+                setState(() {
+                  _showResult = false;
+                });
+              },
+            ),
         ],
       ),
-      // Translation result modal
-      if (_showResult)
-        _TranslationResultModal(
-          translatedText: _translatedText ?? '',
-          onDismiss: () {
-            setState(() {
-              _showResult = false;
-            });
-          },
-        ),
     );
   }
 }
