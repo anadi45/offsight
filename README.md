@@ -1,4 +1,4 @@
-# Offsight
+# offsight
 
 A React Native app for camera-based translation.
 
