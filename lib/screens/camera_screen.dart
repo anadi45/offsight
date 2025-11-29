@@ -1,4 +1,3 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:camera/camera.dart';
@@ -163,7 +162,9 @@ class _CameraScreenState extends State<CameraScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final languageProvider = Provider.of<LanguageProvider>(context);
+    // Use Consumer widgets to only rebuild specific parts when language changes
+    // This prevents crashes when switching language while camera is active
+    // The camera preview won't rebuild, only the UI elements that need updates
 
     if (_controller == null || !_controller!.value.isInitialized) {
       return const Scaffold(
@@ -190,40 +191,45 @@ class _CameraScreenState extends State<CameraScreen> {
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        showDialog(
-                          context: context,
-                          builder: (context) => LanguageSelector(
-                            onLanguageSelected: (languageCode) {
-                              languageProvider.setSelectedLanguage(languageCode);
-                              Navigator.of(context).pop();
-                            },
+                    // Use Consumer to only rebuild the button when language changes
+                    Consumer<LanguageProvider>(
+                      builder: (context, languageProvider, child) {
+                        return ElevatedButton(
+                          onPressed: () {
+                            showDialog(
+                              context: context,
+                              builder: (context) => LanguageSelector(
+                                onLanguageSelected: (languageCode) {
+                                  languageProvider.setSelectedLanguage(languageCode);
+                                  Navigator.of(context).pop();
+                                },
+                              ),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.black.withOpacity(0.6),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 20,
+                              vertical: 10,
+                            ),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                          ),
+                          child: Text(
+                            languageProvider.hasSelectedLanguage
+                                ? languageProvider.getLanguageName(
+                                    languageProvider.selectedLanguage,
+                                  )
+                                : 'Select Language',
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         );
                       },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.black.withOpacity(0.6),
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 20,
-                          vertical: 10,
-                        ),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(20),
-                        ),
-                      ),
-                      child: Text(
-                        languageProvider.hasSelectedLanguage
-                            ? languageProvider.getLanguageName(
-                                languageProvider.selectedLanguage,
-                              )
-                            : 'Select Language',
-                        style: const TextStyle(
-                          color: Colors.white,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
-                        ),
-                      ),
                     ),
                     IconButton(
                       onPressed: _flipCamera,
@@ -279,35 +285,39 @@ class _CameraScreenState extends State<CameraScreen> {
                       ],
                     ),
                     const SizedBox(height: 20),
-                    GestureDetector(
-                      onTap: _isProcessing || !languageProvider.hasSelectedLanguage
-                          ? null
-                          : _takePhoto,
-                      child: Container(
-                        width: 70,
-                        height: 70,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Colors.white,
-                          border: Border.all(
-                            color: Colors.white.withOpacity(0.5),
-                            width: 4,
-                          ),
-                        ),
-                        child: _isProcessing
-                            ? const Center(
-                                child: CircularProgressIndicator(
-                                  color: Colors.blue,
-                                ),
-                              )
-                            : Container(
-                                margin: const EdgeInsets.all(5),
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: Colors.white,
-                                ),
+                    Consumer<LanguageProvider>(
+                      builder: (context, languageProvider, child) {
+                        return GestureDetector(
+                          onTap: _isProcessing || !languageProvider.hasSelectedLanguage
+                              ? null
+                              : _takePhoto,
+                          child: Container(
+                            width: 70,
+                            height: 70,
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              color: Colors.white,
+                              border: Border.all(
+                                color: Colors.white.withOpacity(0.5),
+                                width: 4,
                               ),
-                      ),
+                            ),
+                            child: _isProcessing
+                                ? const Center(
+                                    child: CircularProgressIndicator(
+                                      color: Colors.blue,
+                                    ),
+                                  )
+                                : Container(
+                                    margin: const EdgeInsets.all(5),
+                                    decoration: const BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                          ),
+                        );
+                      },
                     ),
                   ],
                 ),
